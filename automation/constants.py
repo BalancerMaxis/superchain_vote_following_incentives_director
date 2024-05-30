@@ -4,7 +4,7 @@ OUTPUT_FILE_PREFIX = "beets_lst_lrt"
 CHAIN_NAME = "optimism"
 CURRENT_YEAR = 2024
 # How many incentives should be taken away from vote following to be distributed as fixed incentives?  Per 2 week epoch
-FIXED_INCENTIVE_TOKENS_PER_EPOCH = 1_500
+FIXED_INCENTIVE_TOKENS_PER_EPOCH = 0
 # Total number of tokens available per 2 week epoch
 TOTAL_TOKENS_PER_EPOCH = 7_520
 DYNAMIC_BOOST_CAP = 3
