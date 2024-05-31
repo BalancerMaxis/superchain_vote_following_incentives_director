@@ -1,6 +1,6 @@
 from web3 import Web3
 
-OUTPUT_FILE_PREFIX = "beets_lst_lrt"
+OUTPUT_FILE_PREFIX = "op_grant_lst_lrt"
 CHAIN_NAME = "optimism"
 CURRENT_YEAR = 2024
 # How many incentives should be taken away from vote following to be distributed as fixed incentives?  Per 2 week epoch
