@@ -1,3 +1,6 @@
+from bal_addresses import to_checksum_address
+from bal_tools import Subgraph
+from bal_addresses import AddrBook
 import json
 import os
 from collections import defaultdict
@@ -40,9 +43,6 @@ pool_config = importlib.import_module(f"automation.{FILE_PREFIX}")
 boost_data = pool_config.boost_data
 cap_override_data = pool_config.cap_override_data
 fixed_emissions_per_pool = pool_config.fixed_emissions_per_pool
-from bal_addresses import AddrBook
-from bal_tools import Subgraph
-from bal_addresses import to_checksum_address
 
 # Configure Library objects for chain
 addressbook = AddrBook(CHAIN_NAME)
@@ -74,7 +74,7 @@ def get_root_dir() -> str:
     return os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
 
-## Todo: remove once all subgraph interactions have moved to bal_tools
+# Todo: remove once all subgraph interactions have moved to bal_tools
 def make_gql_client(url: str) -> Optional[Client]:
     transport = RequestsHTTPTransport(url=url, retries=3)
     return Client(
@@ -88,7 +88,7 @@ def get_balancer_pool_fees_between_timestamps(start_ts: int, end_ts: int) -> Lis
     This works like this: fetch snapshots by time range from the graph, then find the first and last snapshot
     and calculate the difference between them. This will give us the protocol fees collected for the period.
     """
-    ## TODO: move to bal_tools
+    # TODO: move to bal_tools
     client = make_gql_client(subgraph.get_subgraph_url("core"))
     all_snapthots = []
     limit = 100
@@ -109,7 +109,8 @@ def get_balancer_pool_fees_between_timestamps(start_ts: int, end_ts: int) -> Lis
     # difference between first and last snapshot
     pools = defaultdict(list)
     for snapshot in all_snapthots:
-        pools[snapshot["pool"]["address"]].append(snapshot.get("protocolFee", 0))
+        pools[snapshot["pool"]["address"]].append(
+            snapshot.get("protocolFee", 0))
     # Now calculate the difference between first and last snapshot
     fees_snapshots = []
     for pool_addr, snapshots in pools.items():
@@ -147,7 +148,8 @@ def recur_distribute_unspend_tokens(
     there is no unspent tokens left
     """
     unspent_tokens = TOTAL_TOKENS_PER_EPOCH - sum(
-        [gauge["distribution"] for gauge in tokens_gauge_distributions.values()]
+        [gauge["distribution"]
+            for gauge in tokens_gauge_distributions.values()]
     )
     print(f"recursively distributing {unspent_tokens} unspent tokens")
     if unspent_tokens > 0:
@@ -163,7 +165,8 @@ def recur_distribute_unspend_tokens(
             ]
         )
         # if total uncapped weight is 0, then we can not continue
-        print(f"Distributing {total_uncapped_weight} of vote weight is still uncapped.")
+        print(
+            f"Distributing {total_uncapped_weight} of vote weight is still uncapped.")
         if total_uncapped_weight == 0:
             print(
                 f"WARNING: Was not able to get all tokens under the cap due to a lack of capacity. Double check that final distributions are sensible"
@@ -177,12 +180,14 @@ def recur_distribute_unspend_tokens(
         }.items():
             # For each loop calculate unspent tokens
             unspent_tokens = TOTAL_TOKENS_PER_EPOCH - sum(
-                [gauge["distribution"] for gauge in tokens_gauge_distributions.values()]
+                [gauge["distribution"]
+                    for gauge in tokens_gauge_distributions.values()]
             )
             # Don't distribute more than vote cap
             distribution = min(
                 uncap_gauge["distribution"]
-                + unspent_tokens * uncap_gauge["voteWeight"] / total_uncapped_weight,
+                + unspent_tokens *
+                uncap_gauge["voteWeight"] / total_uncapped_weight,
                 max_tokens_per_pool[a],
             )
             uncap_gauge["distribution"] = distribution
@@ -195,7 +200,8 @@ def recur_distribute_unspend_tokens(
         - sum([g["distribution"] for g in tokens_gauge_distributions.values()])
         > 0
     ):
-        recur_distribute_unspend_tokens(max_tokens_per_pool, tokens_gauge_distributions)
+        recur_distribute_unspend_tokens(
+            max_tokens_per_pool, tokens_gauge_distributions)
 
 
 def run_stip_pipeline(end_date: int) -> None:
@@ -212,7 +218,8 @@ def run_stip_pipeline(end_date: int) -> None:
     start_ts = int(start_date.timestamp())
     end_ts = int(end_date.timestamp())
     target_block = get_block_by_ts(end_ts, chain="mainnet")
-    pool_snapshots = get_balancer_pool_fees_between_timestamps(start_ts, end_ts)
+    pool_snapshots = get_balancer_pool_fees_between_timestamps(
+        start_ts, end_ts)
     print(f"Collected data for dates: {start_date.date()} - {end_date.date()}")
     print(f"Block height at the end date: {target_block}")
     emissions_per_week = get_emissions_per_week()
@@ -253,7 +260,8 @@ def run_stip_pipeline(end_date: int) -> None:
                     if pool_snapshot["protocolFee"]
                     else 0
                 )
-                pool_protocol_fees[Web3.to_checksum_address(gauge_addr)] = protocol_fee
+                pool_protocol_fees[Web3.to_checksum_address(
+                    gauge_addr)] = protocol_fee
                 break
     print(f"Total protocol fees collected: {sum(pool_protocol_fees.values())}")
     # Apply boost data to gauges
@@ -286,7 +294,8 @@ def run_stip_pipeline(end_date: int) -> None:
             and dollar_value_of_bal_emitted > 1
         ):
             dynamic_boost = min(
-                pool_protocol_fees.get(gauge_addr, 0) / dollar_value_of_bal_emitted,
+                pool_protocol_fees.get(gauge_addr, 0) /
+                dollar_value_of_bal_emitted,
                 DYNAMIC_BOOST_CAP,
             )
             print(
@@ -322,7 +331,8 @@ def run_stip_pipeline(end_date: int) -> None:
             gauges[gauge_addr]["id"].lower(), default_vote_cap
         )
         max_tokens_per_gauge[gauge_addr] = (
-            percent_vote_caps_per_gauge[gauge_addr] / 100 * TOTAL_TOKENS_PER_EPOCH
+            percent_vote_caps_per_gauge[gauge_addr] /
+            100 * TOTAL_TOKENS_PER_EPOCH
         )
     # Calculate total weight
     total_weight = sum([gauge["voteWeight"] for gauge in gauges.values()])
@@ -343,7 +353,7 @@ def run_stip_pipeline(end_date: int) -> None:
         )
         # Get L2 gauge addr
 
-        ## Note this ABI should work for most chains given the functions we need
+        # Note this ABI should work for most chains given the functions we need
         mainnet_root_gauge_contract = web3_mainnet.eth.contract(
             address=Web3.to_checksum_address(gauge_addr), abi=get_abi("ArbRootGauge")
         )
@@ -354,7 +364,7 @@ def run_stip_pipeline(end_date: int) -> None:
             "symbol": gauge_data["symbol"],
             "distribution": to_distribute,
             "pctDistribution": to_distribute / TOTAL_TOKENS_PER_EPOCH * 100,
-            "distroToBalancer": to_distribute * pct_to_bal,
+            "distroToBalancer": to_distribute,
             "voteWeightNoBoost": gauge_data["weightNoBoost"],
             "staticBoost": boost_data.get(gauges[gauge_addr]["id"], 1),
             "dynamicBoost": dynamic_boosts.get(gauge_addr, 1),
@@ -378,7 +388,8 @@ def run_stip_pipeline(end_date: int) -> None:
         if gauge["distribution"] > 0
     }
 
-    gauge_distributions_df = pd.DataFrame.from_dict(gauge_distributions, orient="index")
+    gauge_distributions_df = pd.DataFrame.from_dict(
+        gauge_distributions, orient="index")
     gauge_distributions_df = gauge_distributions_df.sort_values(
         by="pctDistribution", ascending=False
     )
