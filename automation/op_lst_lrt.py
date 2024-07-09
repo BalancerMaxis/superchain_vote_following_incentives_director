@@ -40,8 +40,8 @@ ACTIVE_POOLS_AND_OVERRIDES = [
     },
     {
         "pool_id": "0x004700ba0a4f5f22e1e78a277fca55e36f47e09c000000000000000000000104",
-        "meta": {"pool": "ankr galactic", "boostReason": "100% LST, decentralized LST"},
-        "fixedBoost": 3.25,
+        "meta": {"pool": "ankr galactic", "boostReason": "decentralized LST"},
+        "fixedBoost": 1.75,
     },
     {
         "pool_id": "0xa71021492a3966eec735ed1b505afa097c7cfe6f00000000000000000000010d",
@@ -66,9 +66,9 @@ ACTIVE_POOLS_AND_OVERRIDES = [
         "pool_id": "0x2bb4712247d5f451063b5e4f6948abdfb925d93d000000000000000000000136",
         "meta": {
             "pool": "stake me baby weeth/wsteth",
-            "boostReason": "new to OP, 100% LST",
+            "boostReason": "new to OP",
         },
-        "fixedBoost": 3.5,
+        "fixedBoost": 2,
     },
 ]
 
