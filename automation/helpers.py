@@ -150,8 +150,7 @@ class PoolBalance:
 
 
 def get_abi(contract_name: str) -> Union[Dict, List[Dict]]:
-    project_root_dir = os.path.abspath(
-        os.path.dirname(os.path.dirname(__file__)))
+    project_root_dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
     with open(f"{project_root_dir}/abi/{contract_name}.json") as f:
         return json.load(f)
 
@@ -166,8 +165,7 @@ def get_balancer_pool_snapshots(block: int, graph_url: str) -> Optional[List[Dic
     offset = 0
     while True:
         result = client.execute(
-            gql(POOLS_SNAPSHOTS_QUERY.format(
-                first=limit, skip=offset, block=block))
+            gql(POOLS_SNAPSHOTS_QUERY.format(first=limit, skip=offset, block=block))
         )
         all_pools.extend(result["poolSnapshots"])
         offset += limit
@@ -185,8 +183,7 @@ def fetch_all_pools_info(chain: str) -> List[Dict]:
     transport = RequestsHTTPTransport(
         url=BAL_GQL_URL,
         retries=2,
-        headers={
-            "chainId": CHAIN_TO_CHAIN_ID_MAP[chain]} if chain != "mainnet" else {},
+        headers={"chainId": CHAIN_TO_CHAIN_ID_MAP[chain]} if chain != "mainnet" else {},
     )
     client = Client(transport=transport, fetch_schema_from_transport=True)
     query = gql(BAL_GET_VOTING_LIST_QUERY)
@@ -243,15 +240,13 @@ def fetch_token_price_balgql(
     transport = RequestsHTTPTransport(
         url=BAL_GQL_URL,
         retries=2,
-        headers={
-            "chainId": CHAIN_TO_CHAIN_ID_MAP[chain]} if chain != "mainnet" else {},
+        headers={"chainId": CHAIN_TO_CHAIN_ID_MAP[chain]} if chain != "mainnet" else {},
     )
     client = Client(transport=transport, fetch_schema_from_transport=True)
     query = gql(BAL_GQL_QUERY.format(token_addr=token_addr.lower()))
     result = client.execute(query)
     # Sort result by timestamp desc
-    result["tokenGetPriceChartData"].sort(
-        key=lambda x: x["timestamp"], reverse=True)
+    result["tokenGetPriceChartData"].sort(key=lambda x: x["timestamp"], reverse=True)
     # Filter results so they are in between start_date and end_date timestamps
     result_slice = [
         item
@@ -262,8 +257,7 @@ def fetch_token_price_balgql(
         return None
     # Sum all prices and divide by number of days
     twap_price = Decimal(
-        sum([Decimal(item["price"])
-            for item in result_slice]) / len(result_slice)
+        sum([Decimal(item["price"]) for item in result_slice]) / len(result_slice)
     )
     return twap_price
 
@@ -286,8 +280,7 @@ def get_twap_bpt_price(
         ),
         abi=get_abi("BalancerVault"),
     )
-    balancer_pool_address, _ = balancer_vault.functions.getPool(
-        balancer_pool_id).call()
+    balancer_pool_address, _ = balancer_vault.functions.getPool(balancer_pool_id).call()
     weighed_pool_contract = web3.eth.contract(
         address=web3.to_checksum_address(balancer_pool_address),
         abi=get_abi("WeighedPool"),
@@ -318,8 +311,7 @@ def get_twap_bpt_price(
     if not all([balance.twap_price for balance in balances]):
         return None
     # Now we have all prices, let's calculate total price
-    total_price = sum(
-        [balance.balance * balance.twap_price for balance in balances])
+    total_price = sum([balance.balance * balance.twap_price for balance in balances])
     return total_price / Decimal(total_supply)
 
 
