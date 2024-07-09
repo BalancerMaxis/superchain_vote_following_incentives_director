@@ -39,7 +39,7 @@ ACTIVE_POOLS_AND_OVERRIDES = [
         "meta": {"pool": "gyro wsteth/weth"},
     },
     {
-        "pool_id": "0x004700ba0a4f5f22e1e78a277fca55e36f47e09c",
+        "pool_id": "0x004700ba0a4f5f22e1e78a277fca55e36f47e09c000000000000000000000104",
         "meta": {"pool": "ankr galactic", "boostReason": "100% LST, decentralized LST"},
         "fixedBoost": 3.25,
     },
