@@ -18,7 +18,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Setup Python 3.9
+    - name: Setup Python 3.10
       uses: actions/setup-python@v2
       with:
         python-version: "3.10"
@@ -38,7 +38,7 @@ jobs:
       with:
         commit-message: "Generate  incentives run for ${{ github.event.inputs.epoch_end_date }}"
         title: "Generate  incentives run for ${{ github.event.inputs.epoch_end_date }}"
-        assignees: tritium-vlk
+        assignees: franzns
         branch: gha-payment-round
         delete-branch: true
         labels: "Automated PR"
