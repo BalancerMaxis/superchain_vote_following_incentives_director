@@ -70,22 +70,6 @@ ACTIVE_POOLS_AND_OVERRIDES = [
         },
         "fixedBoost": 2,
     },
-    {
-        "pool_id": "0x0ccb0c34d4898dfa8de3ece9d814074e60adefd0000000000000000000000142",
-        "meta": {
-            "pool": "restake on me ineth/wsteth",
-            "boostReason": "new to OP",
-        },
-        "fixedBoost": 2,
-    },
-    {
-        "pool_id": "0xc9eb4b8ce914ee451360b315ffd1d1af8df96be9000000000000000000000143",
-        "meta": {
-            "pool": "staked inception insteth/wsteth",
-            "boostReason": "new to OP",
-        },
-        "fixedBoost": 2,
-    },
 ]
 
 
