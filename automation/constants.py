@@ -9,7 +9,7 @@ CURRENT_YEAR = 2024
 # How many incentives should be taken away from vote following to be distributed as fixed incentives?  Per 2 week epoch
 FIXED_INCENTIVE_TOKENS_PER_EPOCH = 1333.4541607938427
 # Total number of tokens available per 2 week epoch
-TOTAL_TOKENS_PER_EPOCH = 14074
+TOTAL_TOKENS_PER_EPOCH = 15407.4541607938427
 DYNAMIC_BOOST_CAP = 3
 MIN_BAL_IN_USD_FOR_BOOST = 200
 TOKENS_TO_FOLLOW_VOTING = TOTAL_TOKENS_PER_EPOCH - FIXED_INCENTIVE_TOKENS_PER_EPOCH
