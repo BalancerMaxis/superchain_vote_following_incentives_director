@@ -78,7 +78,7 @@ ACTIVE_POOLS_AND_OVERRIDES = [
         },
         "fixedBoost": 2,
         "fixedEmissions": 1333.4541607938427,
-        "capOverride": 30
+        "capOverride": 30,
     },
     {
         "pool_id": "0xc9eb4b8ce914ee451360b315ffd1d1af8df96be9000000000000000000000143",
