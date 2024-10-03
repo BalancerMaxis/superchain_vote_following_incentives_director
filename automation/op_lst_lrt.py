@@ -86,6 +86,14 @@ ACTIVE_POOLS_AND_OVERRIDES = [
         },
         "fixedBoost": 2,
     },
+    {
+        "pool_id": "0xcb7d357c84b101e3d559ff4845cef63d7d0753ef000000000000000000000150",
+        "meta": {
+            "pool": "kelps restaking wrsETH/wsteth",
+            "boostReason": "new to OP",
+        },
+        "fixedBoost": 2,
+    },
 ]
 
 
